@@ -1,0 +1,29 @@
+body
+{
+	font-family: Verdana, Arial, sans-serif;
+	font-size: 12px;
+}
+
+td
+{
+	cursor: pointer;
+	height: 15px;
+	width: 15px;
+	text-align: center;
+}
+
+.alive
+{
+	background-color: lightgreen;
+}
+
+.dead
+{
+	/*background-color: white;*/
+	background-color: #F0F0F0;
+}
+
+.neighbour
+{
+	background-color: orange;
+}
