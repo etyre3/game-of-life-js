@@ -1,6 +1,5 @@
 function resetTable ()
 {
-	//var table = document.getElementById('game-table');
 	var cells = document.getElementsByTagName('td');
 	var len = cells.length;
 
@@ -11,6 +10,11 @@ function resetTable ()
 		if ( hasClass( cells[i], 'alive' ) )
 		{
 			removeClass( cells[i], 'alive' );
+			addClass( cells[i], 'dead' );
+		}
+		if ( hasClass( cells[i], 'neighbour' ) )
+		{
+			removeClass( cells[i], 'neighbour' );
 			addClass( cells[i], 'dead' );
 		}
 		else
@@ -50,9 +54,11 @@ function addActions ()
 {
 	var step = document.getElementById( 'step' );
 	var reset = document.getElementById( 'reset' );
+	var neighbours = document.getElementById( 'select-neighbours' );
 
 	addEventSimple( step, 'click', nextStep );
 	addEventSimple( reset, 'click', resetGame );
+	addEventSimple( neighbours, 'click', selectAllNeighbours );
 }
 
 function resetGame ()
@@ -94,6 +100,19 @@ function nextStep ()
 	createTable ( newStateArray );
 }
 
+function selectAllNeighbours ()
+{
+
+	var aliveCells = getElementsByClass( 'alive' );
+	var len = aliveCells.length;
+	var i = 0;
+
+	for( i = 0; i < len; i++ )
+	{
+		selectNeighbours( parseInt(aliveCells[i].getAttribute('id')), 21 );
+	}
+}
+
 // n - > number of rows
 function selectNeighbours ( id, n )
 {
@@ -121,8 +140,8 @@ function selectNeighbours ( id, n )
 
 	for( i = 0; i < 8; i++ )
 	{
-		if ( id % n == 0 || id % n == 20 )
-		{
+		//if ( id % n == 0 || id % n == 20 )
+		//{
 			if ( id % n == 0 )
 			{
 				//first cell in row
@@ -133,7 +152,7 @@ function selectNeighbours ( id, n )
 				//last cell in row
 				cells[0] = cells[2] = cells[5] = null;
 			}
-		}
+		//}
 
 		if( cells[i] == null )
 		{
@@ -149,8 +168,8 @@ function selectNeighbours ( id, n )
 		else if ( hasClass( cells[i], 'alive' ) )
 		{
 			// neighbour is alive
-			removeClass( cells[i], 'alive' );
-			addClass( cells[i], 'neighbour' );
+			//removeClass( cells[i], 'alive' );
+			//addClass( cells[i], 'neighbour' );
 		}
 	}
 }
@@ -208,16 +227,18 @@ function nextState ( id, n )
 		if ( hasClass( cells[i], 'dead' ) )
 		{
 			// neighbour is dead
-			//removeClass( cells[i], 'dead' );
-			//addClass( cells[i], 'neighbour' );
 			dead++;
 		}
-		else if ( hasClass( cells[i], 'alive' ) )
+		if ( hasClass( cells[i], 'alive' ) )
 		{
 			// neighbour is alive
-			//removeClass( cells[i], 'alive' );
-			//addClass( cells[i], 'neighbour' );
 			alive++;
+		}
+		if ( hasClass( cells[i], 'neighbour' ) )
+		{
+			removeClass( cells[i], 'neighbour' );
+			addClass( cells[i], 'dead' );
+			//alive++;
 		}
 	}
 
