@@ -1,3 +1,8 @@
+
+/**
+ * @function: resetTable ()
+ * @description: resets table - sets every TD to 'dead' class
+ */
 function resetTable ()
 {
 	var cells = document.getElementsByTagName('td');
@@ -24,6 +29,10 @@ function resetTable ()
 	}	
 }
 
+/**
+ * @function: createTable ( array )
+ * @description: creates new table based on array, which stores new states
+ */
 function createTable ( array )
 {
 	var cells = document.getElementsByTagName('td');
@@ -50,23 +59,66 @@ function createTable ( array )
 	}	
 }
 
+/**
+ * @function: customSelect ()
+ * @description: allow user to custom select or unselect cells
+ */
+function customSelect ()
+{
+	var element = this;
+	if( hasClass( element, 'dead' ) )
+	{
+		removeClass( element, 'dead' );
+		addClass( element, 'alive' );
+	}
+	else if( hasClass( element, 'alive' ) )
+	{
+		removeClass( element, 'alive' );
+		addClass( element, 'dead' );
+	}
+	else if( hasClass( element, 'neighbour' ) )
+	{
+		removeClass( element, 'neighbour' );
+		addClass( element, 'alive' );
+	}
+}
+
+/**
+ * @function: addActions ()
+ * @description: adds action to elements
+ */
 function addActions ()
 {
 	var step = document.getElementById( 'step' );
 	var reset = document.getElementById( 'reset' );
 	var neighbours = document.getElementById( 'select-neighbours' );
+	var cells = document.getElementsByTagName( 'td' );
+	var len = cells.length;
 
 	addEventSimple( step, 'click', nextStep );
 	addEventSimple( reset, 'click', resetGame );
 	addEventSimple( neighbours, 'click', selectAllNeighbours );
+
+	for ( i = 0; i < len; i++ )
+	{
+		addEventSimple( cells[i], 'click', customSelect );
+	}
 }
 
+/**
+ * @function: resetGame ()
+ * @description: resets table and selects random cells
+ */
 function resetGame ()
 {
 	resetTable();
 	randomSelect( 50 );
 }
 
+/**
+ * @function: randomSelect ( num )
+ * @description: randomly selects <num> cells in table
+ */
 function randomSelect ( num )
 {
 	var randomNumber = 0;
@@ -82,6 +134,10 @@ function randomSelect ( num )
 	}
 }
 
+/**
+ * @function: nextStep ()
+ * @description: determine game's new state
+ */
 function nextStep ()
 {
 	var cells = document.getElementsByTagName('td');
@@ -100,6 +156,10 @@ function nextStep ()
 	createTable ( newStateArray );
 }
 
+/**
+ * @function: selectAllNeighbours ()
+ * @description: selects neighbours of all alive cells in table
+ */
 function selectAllNeighbours ()
 {
 
@@ -113,7 +173,10 @@ function selectAllNeighbours ()
 	}
 }
 
-// n - > number of rows
+/**
+ * @function: selectNeighbours ( id, n )
+ * @description: selects all neighbours of cell with ID == id; n is a number of rows (it's required to find out neighbours positions)
+ */
 function selectNeighbours ( id, n )
 {
 	var i = 0;
@@ -140,8 +203,8 @@ function selectNeighbours ( id, n )
 
 	for( i = 0; i < 8; i++ )
 	{
-		//if ( id % n == 0 || id % n == 20 )
-		//{
+		if ( id % n == 0 || id % n == 20 )
+		{
 			if ( id % n == 0 )
 			{
 				//first cell in row
@@ -152,7 +215,7 @@ function selectNeighbours ( id, n )
 				//last cell in row
 				cells[0] = cells[2] = cells[5] = null;
 			}
-		//}
+		}
 
 		if( cells[i] == null )
 		{
@@ -174,7 +237,10 @@ function selectNeighbours ( id, n )
 	}
 }
 
-/**************************************************************************/
+/**
+ * @function: nextState ( id, n )
+ * @description: determine next state of single cell with ID == id; n is required to find out neighbours positions
+ */
 function nextState ( id, n )
 {
 	var i = 0;
