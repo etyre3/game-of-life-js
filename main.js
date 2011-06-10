@@ -8,7 +8,15 @@ function resetTable ()
 
 	for( i = 0; i < len; i++ )
 	{
-		addClass( cells[i], 'dead' );
+		if ( hasClass( cells[i], 'alive' ) )
+		{
+			removeClass( cells[i], 'alive' );
+			addClass( cells[i], 'dead' );
+		}
+		else
+		{
+			addClass( cells[i], 'dead' );
+		}
 	}	
 }
 
@@ -41,7 +49,16 @@ function createTable ( array )
 function addActions ()
 {
 	var step = document.getElementById( 'step' );
+	var reset = document.getElementById( 'reset' );
+
 	addEventSimple( step, 'click', nextStep );
+	addEventSimple( reset, 'click', resetGame );
+}
+
+function resetGame ()
+{
+	resetTable();
+	randomSelect( 50 );
 }
 
 function randomSelect ( num )
@@ -61,8 +78,6 @@ function randomSelect ( num )
 
 function nextStep ()
 {
-	//var aliveCells = getElementsByClass( 'alive' );
-	//var len = aliveCells.length;
 	var cells = document.getElementsByTagName('td');
 	var len = cells.length;
 	var i = 0;
